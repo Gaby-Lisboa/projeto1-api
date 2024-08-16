@@ -1,129 +1,191 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Text, View, TextInput, Button, Pressable } from 'react-native';
 import styles from './styles';
 
 export default function Home() {
-  const [id, setID] = useState('');
-  const [filmeG, setFilmeG] = useState('');
-  const [generoG, setGeneroG] = useState('');
-  const [anoG, setAnoG] = useState('');
-  const [classifG, setClassifG] = useState('');
-  const [idiomaG, setIdiomaG] = useState('');
-  const [filme, setFilme] = useState('');
-  const [genero, setGenero] = useState('');
-  const [ano, setAno] = useState('');
-  const [classif, setClassif] = useState('');
-  const [idioma, setIdioma] = useState('');
+    const [id, setID] = useState('')
+    const [filmeG, setFilmeG] = useState('')
+    const [generoG, setGeneroG] = useState('')
+    const [anoG, setAnoG] = useState('')
+    const [classifG, setClassifG] = useState('')
+    const [idiomaG, setIdiomaG] = useState('')
+    const [filme, setFilme] = useState('')
+    const [genero, setGenero] = useState('')
+    const [ano, setAno] = useState('')
+    const [classif, setClassif] = useState('')
+    const [idioma, setIdioma] = useState('')
 
-  const capturar = async () => {
-    try {
-        const response = await axios.get(
+    const capturar = async ()=>{
+        try{
+            const response = await axios.get(
+              'http://127.0.0.1:8000/api/filme/' + id
+              
+            )
+            console.log(response.data)
+            setFilmeG(response.data.titulo)
+            setGeneroG(response.data.genero)
+            setAnoG(response.data.ano)
+            setClassifG(response.data.classif)
+            setIdiomaG(response.data.idioma)
+        }catch{
+            console.log(Error)
+        }
+    }
 
+    const enviar = async () => {
+      try {
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/listarfilmes',
+          {
+            titulo: filme,
+            genero: genero,
+            ano: ano,
+            classif: classif,
+            idioma: idioma,
+          }
         )
-    } catch {
-
+          console.log('Dados inseridos com sucesso...')
+        
+      } catch (error) {
+        console.log('Erro ao inseriros dados...', error)
+      }
     }
-  }
+    const atualizar = async () => {
+      try {
+        const response = await axios.put(
+          'http://127.0.0.1:8000/api/filme/' + id,
+          {
+            titulo: filmeG,
+            genero: generoG,
+            ano: anoG,
+            classif: classifG,
+            idioma: idiomaG,
+          }
+        );
+        console.log('Alterado com sucesso...');
+      } catch (error) {
+        console.log('Erro ao atualizar os dados...', error);
+      }
+    };
 
-  const handleGet = async () => {
-    try {
-      const response = await axios.get(`https://example.com/filmes/${id}`);
-      const data = response.data;
-      setFilme(data.filme);
-      setGenero(data.genero);
-      setAno(data.ano);
-      setClassif(data.classificacao);
-      setIdioma(data.idioma);
-    } catch (error) {
-      console.error('Erro ao buscar o filme:', error);
-    }
-  };
+    const deletar = async () => {
+      try {
+        const response = await axios.delete(
+          'http://127.0.0.1:8000/api/filme/' + id
+        );
+        console.log('Deletado com sucesso...');
+      } catch (error) {
+        console.log('Erro ao deletar...', error);
+      }
+    };
 
-  const handlePost = async () => {
-    try {
-      const response = await axios.post('https://example.com/filmes', {
-        filme,
-        genero,
-        ano,
-        classificacao: classif,
-        idioma,
-      });
-      console.log('Filme adicionado:', response.data);
-    } catch (error) {
-      console.error('Erro ao adicionar o filme:', error);
-    }
-  };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.stGet}>
-        <Text style={styles.title}>GET</Text>
-        <View style={styles.inputRow}>
-          <Text>ID:</Text>
-          <TextInput
-            value={id}
-            onChangeText={(e) => { setID(e) }}
-            style={styles.caixaID}
-          />
+    return (
+        <View style={styles.container}>
+
+            <View style={styles.stGet}>
+                <View style={{ flexDirection: 'row', padding: 10 }}>
+                    <Text>ID:</Text>
+                    <TextInput
+                        value={id}
+                        onChangeText={(e) => { setID(e) }}
+                        style={styles.caixaID}
+                    />
+                    <Pressable
+                        style={styles.btnGet}
+                        onPress={capturar}
+                    >
+                        <Text style={{ fontWeight: 'bold', }}>GET</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.btnPut}
+                        onPress={atualizar}
+                    >
+                        <Text style={{ fontWeight: 'bold', }}>PUT</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.btnDelete}
+                        onPress={deletar}
+                    >
+                        <Text style={{ fontWeight: 'bold', }}>DELETE</Text>
+                    </Pressable>
+                </View>
+                <Text>Filme</Text>
+                <TextInput
+                  value={filmeG}
+                  style={styles.caixaGet}
+                  onChangeText={(e) => { setFilmeG(e) }}
+                />
+                <Text>Gênero</Text>
+                <TextInput
+                  value={generoG}
+                  style={styles.caixaGet}
+                  onChangeText={(e) => { setGeneroG(e) }}
+                />
+                <Text>Ano</Text>
+                <TextInput
+                  value={anoG}
+                  style={styles.caixaGet}
+                  onChangeText={(e) => { setAnoG(e) }}
+                />
+                <Text>Idioma</Text>
+                <TextInput
+                  value={idiomaG}
+                  style={styles.caixaGet}
+                  onChangeText={(e) => { setIdiomaG(e) }}
+                />
+                <Text>Classificação</Text>
+                <TextInput
+                  value={classifG}
+                  style={styles.caixaGet}
+                  onChangeText={(e) => { setClassifG(e) }}
+                />
+                
+
+
+            </View>
+
+            <View style={styles.stPost}>
+                <Pressable
+                    style={styles.btnPost}
+                    onPress={enviar}
+                >
+                    <Text style={{ fontWeight: 'bold', }}>POST</Text>
+                </Pressable>
+                <Text>Filme</Text>
+                <TextInput
+                    value={filme}
+                    onChangeText={(e) => { setFilme(e) }}
+                    style={styles.caixaPost}
+                />
+                <Text>Gênero</Text>
+                <TextInput
+                    value={genero}
+                    onChangeText={(e) => { setGenero(e) }}
+                    style={styles.caixaPost}
+                />
+                <Text>Ano</Text>
+                <TextInput
+                    value={ano}
+                    onChangeText={(e) => { setAno(e) }}
+                    style={styles.caixaPost}
+                />
+                <Text>Idioma</Text>
+                <TextInput
+                    value={idioma}
+                    onChangeText={(e) => { setIdioma(e) }}
+                    style={styles.caixaPost}
+                />
+                <Text>Classificação</Text>
+                <TextInput
+                    value={classif}
+                    onChangeText={(e) => { setClassif(e) }}
+                    style={styles.caixaPost}
+                />
+            </View>
+
 
         </View>
-        <Text style={styles.label}>Filme</Text>
-        <Text style={styles.caixaGet}>{filme}</Text>
-        <Text style={styles.label}>Gênero</Text>
-        <Text style={styles.caixaGet}>{genero}</Text>
-        <Text style={styles.label}>Ano</Text>
-        <Text style={styles.caixaGet}>{ano}</Text>
-        <Text style={styles.label}>Idioma</Text>
-        <Text style={styles.caixaGet}>{idioma}</Text>
-        <Text style={styles.label}>Classificação</Text>
-        <Text style={styles.caixaGet}>{classif}</Text>
-        <Pressable style={styles.btn} onPress={handleGet}>
-            <Text style={styles.btnText}>GET</Text>
-          </Pressable>
-      </View>
-
-      <View style={styles.stPost}>
-        <Text style={styles.title}>POST</Text>
-        
-        <Text style={styles.label}>Filme</Text>
-        <TextInput
-          value={filme}
-          onChangeText={(e) => { setFilme(e) }}
-          style={styles.caixaPost}
-        />
-        
-        <Text style={styles.label}>Gênero</Text>
-        <TextInput
-          value={genero}
-          onChangeText={(e) => { setGenero(e) }}
-          style={styles.caixaPost}
-        />
-
-        <Text style={styles.label}>Ano</Text>
-        <TextInput
-          value={ano}
-          onChangeText={(e) => { setAno(e) }}
-          style={styles.caixaPost}
-        />
-
-        <Text style={styles.label}>Idioma</Text>
-        <TextInput
-          value={idioma}
-          onChangeText={(e) => { setIdioma(e) }}
-          style={styles.caixaPost}
-        />
-
-        <Text style={styles.label}>Classificação</Text>
-        <TextInput
-          value={classif}
-          onChangeText={(e) => { setClassif(e) }}
-          style={styles.caixaPost}
-        />
-        <Pressable style={styles.btn} onPress={handlePost}>
-          <Text style={styles.btnText}>POST</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
+    )
 }
-
