@@ -46,6 +46,11 @@ export default function Home() {
           }
         )
           console.log('Dados inseridos com sucesso...')
+          setFilme('')
+          setGenero('')
+          setAno('')
+          setClassif('')
+          setIdioma('')
         
       } catch (error) {
         console.log('Erro ao inseriros dados...', error)
@@ -75,6 +80,11 @@ export default function Home() {
           'http://127.0.0.1:8000/api/filme/' + id
         );
         console.log('Deletado com sucesso...');
+        setFilmeG('')
+        setGeneroG('')
+        setAnoG('')
+        setClassifG('')
+        setIdiomaG('')
       } catch (error) {
         console.log('Erro ao deletar...', error);
       }
