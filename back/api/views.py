@@ -5,6 +5,10 @@ from .models import Filmes
 from .serializer import FilmesSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
+
 
 
 @api_view(['GET', 'POST'])
@@ -22,10 +26,12 @@ def listar_filmes(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FilmesViews(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Filmes.objects.all()
     serializer_class = FilmesSerializer
     
 class FilmesDetailView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Filmes.objects.all()
     serializer_class = FilmesSerializer
 
